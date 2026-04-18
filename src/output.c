@@ -81,6 +81,19 @@ name_from_ip_proto(unsigned ip_proto)
     }
 }
 
+/*****************************************************************************
+ * This function converts the version of the ipaddress struct back into a
+ * readable string.
+ *****************************************************************************/
+const char *
+name_from_ip_version(unsigned char version)
+{
+    switch (version) {
+        case 4: return "ipv4";
+        case 6: return "ipv6";
+        default: return "err";
+    }
+}
 
 /*****************************************************************************
  * The actual 'status' variable is narrowly defined depending on the
