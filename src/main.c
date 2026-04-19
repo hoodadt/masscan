@@ -1848,6 +1848,7 @@ int main(int argc, char *argv[])
             x += nmapserviceprobes_selftest();
             x += rstfilter_selftest();
             x += masscan_app_selftest();
+            x += icmp_selftest();
 
 
             if (x != 0) {
