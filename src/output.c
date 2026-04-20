@@ -396,6 +396,7 @@ output_create(const struct Masscan *masscan, unsigned thread_index)
     out->redis.password = masscan ->redis.password;
     out->is_banner = masscan->is_banners;               /* --banners */
     out->is_banner_rawudp = masscan->is_banners_rawudp; /* --rawudp */
+    out->is_flush_stdout = masscan->is_flush_stdout;    /* --flush-stdout */
     out->is_gmt = masscan->is_gmt;
     out->is_interactive = masscan->output.is_interactive;
     out->is_show_open = masscan->output.is_show_open;
@@ -861,7 +862,7 @@ output_report_status(struct Output *out, time_t timestamp, int status,
      */
     out->funcs->status(out, fp, timestamp, status, ip, ip_proto, port, reason, ttl);
 
-    if (fp == stdout)
+    if (out->is_flush_stdout && fp == stdout)
         fflush(fp);
 }
 
@@ -937,6 +938,8 @@ output_report_banner(struct Output *out, time_t now,
      */
     out->funcs->banner(out, fp, now, ip, ip_proto, port, proto, ttl, px, length);
 
+    if (out->is_flush_stdout && fp == stdout)
+        fflush(fp);
 }
 
 

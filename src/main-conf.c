@@ -1128,6 +1128,18 @@ static int SET_banners_rawudp(struct Masscan *masscan, const char *name, const c
     return CONF_OK;
 }
 
+static int SET_flush_stdout(struct Masscan *masscan, const char *name, const char *value)
+{
+    UNUSEDPARM(name);
+    if (masscan->echo) {
+        if (masscan->is_flush_stdout || masscan->echo_all)
+            fprintf(masscan->echo, "flush-stdout = %s\n", masscan->is_flush_stdout?"true":"false");
+       return 0;
+    }
+    masscan->is_flush_stdout = parseBoolean(value);
+    return CONF_OK;
+}
+
 static int SET_capture(struct Masscan *masscan, const char *name, const char *value)
 {
     if (masscan->echo) {
@@ -2363,6 +2375,7 @@ struct ConfigParameter config_parameters[] = {
     {"shard",           SET_shard,              0,      {"shards",0}},
     {"banners",         SET_banners,            F_BOOL, {"banner",0}}, /* --banners */
     {"rawudp",          SET_banners_rawudp,     F_BOOL, {"rawudp",0}}, /* --rawudp */
+    {"flush-stdout",    SET_flush_stdout,       F_BOOL, {"flush-stdout",0}}, /* --flush-stdout" */
     {"nobanners",       SET_nobanners,          F_BOOL, {"nobanner",0}},
     {"retries",         SET_retries,            0,      {"retry", "max-retries", "max-retry", 0}},
     {"noreset",         SET_noreset,            F_BOOL, {0}},
