@@ -83,7 +83,7 @@ struct Output
 
     unsigned is_banner:1;           /* --banners */
     unsigned is_banner_rawudp:1;    /* --rawudp */
-    unsigned is_flush_stdout:1;     /* --flush-stdout */
+    unsigned is_output_flush:1;     /* --output-flush */
     unsigned is_gmt:1; /* --gmt */
     unsigned is_interactive:1; /* echo to command line */
     unsigned is_show_open:1; /* show open ports (default) */

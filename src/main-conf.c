@@ -218,6 +218,7 @@ print_nmap_help(void)
 "  -oL/-oJ/-oD/-oG/-oB/-oX/-oU <file>: Output scan in List/JSON/nDjson/Grepable/Binary/XML/Unicornscan format,\n"
 "     respectively, to the given filename. Shortcut for\n"
 "     --output-format <format> --output-file <file>\n"
+"  --output-flush: Flushes output per host found (recommended for real-time reading).\n"
 "  -v: Increase verbosity level (use -vv or more for greater effect)\n"
 "  -d: Increase debugging level (use -dd or more for greater effect)\n"
 "  --open: Only show open (or possibly open) ports\n"
@@ -1128,15 +1129,15 @@ static int SET_banners_rawudp(struct Masscan *masscan, const char *name, const c
     return CONF_OK;
 }
 
-static int SET_flush_stdout(struct Masscan *masscan, const char *name, const char *value)
+static int SET_output_flush(struct Masscan *masscan, const char *name, const char *value)
 {
     UNUSEDPARM(name);
     if (masscan->echo) {
-        if (masscan->is_flush_stdout || masscan->echo_all)
-            fprintf(masscan->echo, "flush-stdout = %s\n", masscan->is_flush_stdout?"true":"false");
+        if (masscan->is_output_flush || masscan->echo_all)
+            fprintf(masscan->echo, "flush-stdout = %s\n", masscan->is_output_flush?"true":"false");
        return 0;
     }
-    masscan->is_flush_stdout = parseBoolean(value);
+    masscan->is_output_flush = parseBoolean(value);
     return CONF_OK;
 }
 
@@ -2375,7 +2376,7 @@ struct ConfigParameter config_parameters[] = {
     {"shard",           SET_shard,              0,      {"shards",0}},
     {"banners",         SET_banners,            F_BOOL, {"banner",0}}, /* --banners */
     {"rawudp",          SET_banners_rawudp,     F_BOOL, {"rawudp",0}}, /* --rawudp */
-    {"flush-stdout",    SET_flush_stdout,       F_BOOL, {"flush-stdout",0}}, /* --flush-stdout" */
+    {"output-flush",    SET_output_flush,       F_BOOL, {"output-flush",0}}, /* --output-flush" */
     {"nobanners",       SET_nobanners,          F_BOOL, {"nobanner",0}},
     {"retries",         SET_retries,            0,      {"retry", "max-retries", "max-retry", 0}},
     {"noreset",         SET_noreset,            F_BOOL, {0}},
