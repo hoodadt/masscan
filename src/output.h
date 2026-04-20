@@ -130,6 +130,7 @@ struct Output
 };
 
 const char *name_from_ip_proto(unsigned ip_proto);
+const char *name_from_ip_version(unsigned char version);
 const char *status_string(enum PortStatus x);
 const char *reason_string(int x, char *buffer, size_t sizeof_buffer);
 const char *normalize_string(const unsigned char *px, size_t length,
