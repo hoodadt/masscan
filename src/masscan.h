@@ -188,7 +188,6 @@ struct Masscan
     unsigned is_sendq:1;        /* --sendq */
     unsigned is_banners:1;      /* --banners */
     unsigned is_banners_rawudp:1; /* --rawudp */
-    unsigned is_output_flush:1; /* --output-flush */
     unsigned is_offline:1;      /* --offline */
     unsigned is_noreset:1;      /* --noreset, don't transmit RST */
     unsigned is_gmt:1;          /* --gmt, all times in GMT */
@@ -282,7 +281,14 @@ struct Masscan
          * <stdout> rather than to a file.
          */
         char filename[256];
-        
+
+        /**
+         * --output-flush
+         * We should flush the file with every host/banner found
+         */
+        unsigned is_output_flush:1;
+
+
         /**
          * A feature of the XML output where we can insert an optional 
          * stylesheet into the file for better rendering on web browsers

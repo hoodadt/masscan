@@ -396,13 +396,13 @@ output_create(const struct Masscan *masscan, unsigned thread_index)
     out->redis.password = masscan ->redis.password;
     out->is_banner = masscan->is_banners;               /* --banners */
     out->is_banner_rawudp = masscan->is_banners_rawudp; /* --rawudp */
-    out->is_output_flush = masscan->is_output_flush;    /* --flush-stdout */
     out->is_gmt = masscan->is_gmt;
     out->is_interactive = masscan->output.is_interactive;
     out->is_show_open = masscan->output.is_show_open;
     out->is_show_closed = masscan->output.is_show_closed;
     out->is_show_host = masscan->output.is_show_host;
     out->is_append = masscan->output.is_append;
+    out->is_output_flush = masscan->output.is_output_flush;
     out->xml.stylesheet = duplicate_string(masscan->output.stylesheet);
     out->rotate.directory = duplicate_string(masscan->output.rotate.directory);
     if (masscan->nic_count <= 1)

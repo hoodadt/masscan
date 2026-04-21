@@ -1129,18 +1129,6 @@ static int SET_banners_rawudp(struct Masscan *masscan, const char *name, const c
     return CONF_OK;
 }
 
-static int SET_output_flush(struct Masscan *masscan, const char *name, const char *value)
-{
-    UNUSEDPARM(name);
-    if (masscan->echo) {
-        if (masscan->is_output_flush || masscan->echo_all)
-            fprintf(masscan->echo, "flush-stdout = %s\n", masscan->is_output_flush?"true":"false");
-       return 0;
-    }
-    masscan->is_output_flush = parseBoolean(value);
-    return CONF_OK;
-}
-
 static int SET_capture(struct Masscan *masscan, const char *name, const char *value)
 {
     if (masscan->echo) {
@@ -1637,6 +1625,18 @@ static int SET_output_append(struct Masscan *masscan, const char *name, const ch
         masscan->output.is_append = 0;
     else
         masscan->output.is_append = 1;
+    return CONF_OK;
+}
+
+static int SET_output_flush(struct Masscan *masscan, const char *name, const char *value)
+{
+    UNUSEDPARM(name);
+    if (masscan->echo) {
+        if (masscan->output.is_output_flush || masscan->echo_all)
+            fprintf(masscan->echo, "output-flush = %s\n", masscan->output.is_output_flush?"true":"false");
+       return 0;
+    }
+    masscan->output.is_output_flush = parseBoolean(value);
     return CONF_OK;
 }
 
@@ -2376,7 +2376,6 @@ struct ConfigParameter config_parameters[] = {
     {"shard",           SET_shard,              0,      {"shards",0}},
     {"banners",         SET_banners,            F_BOOL, {"banner",0}}, /* --banners */
     {"rawudp",          SET_banners_rawudp,     F_BOOL, {"rawudp",0}}, /* --rawudp */
-    {"output-flush",    SET_output_flush,       F_BOOL, {"output-flush",0}}, /* --output-flush" */
     {"nobanners",       SET_nobanners,          F_BOOL, {"nobanner",0}},
     {"retries",         SET_retries,            0,      {"retry", "max-retries", "max-retry", 0}},
     {"noreset",         SET_noreset,            F_BOOL, {0}},
@@ -2409,6 +2408,7 @@ struct ConfigParameter config_parameters[] = {
     {"output-noshow",   SET_output_noshow,      0,      {"noshow",0}},
     {"output-show-open",SET_output_show_open,   F_BOOL, {"open", "open-only", 0}},
     {"output-append",   SET_output_append,      0,      {"append-output",0}},
+    {"output-flush",    SET_output_flush,       F_BOOL, {"output-flush",0}},
     {"rotate",          SET_rotate_time,        0,      {"output-rotate", "rotate-output", "rotate-time", 0}},
     {"rotate-dir",      SET_rotate_directory,   0,      {"output-rotate-dir", "rotate-directory", 0}},
     {"rotate-offset",   SET_rotate_offset,      0,      {"output-rotate-offset", 0}},
