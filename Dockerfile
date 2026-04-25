@@ -1,26 +1,25 @@
-FROM ubuntu:25.10 AS builder
+FROM alpine:latest AS build
 
-RUN apt update && apt install -y build-essential libpcap-dev git && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache build-base libpcap-dev linux-headers
 
 WORKDIR /build
-
 COPY . .
 
-RUN make -j"$(nproc)" && make install
+RUN mkdir bin && make -j$(nproc) && make install
 
+FROM alpine:latest
 
-FROM ubuntu:25.10
+# OCI annotations
+LABEL org.opencontainers.image.title="masscan" \
+      org.opencontainers.image.authors="masscan Community" \
+      org.opencontainers.image.description="TCP port scanner" \
+      org.opencontainers.image.source="https://github.com/robertdavidgraham/masscan" \
+      org.opencontainers.image.documentation="https://man.archlinux.org/man/extra/masscan/masscan.8.en"
 
-LABEL org.opencontainers.image.title="masscan"
-LABEL org.opencontainers.image.source="https://github.com/robertdavidgraham/masscan"
-LABEL org.opencontainers.image.licenses="AGPL-3.0"
-LABEL org.opencontainers.image.description="TCP port scanner"
+RUN apk add --no-cache libpcap
 
-RUN apt update && apt install -y libpcap0.8 && rm -rf /var/lib/apt/lists/*
-
+# docker run --rm -v $(pwd):/scan -it masscan:latest -p 53 8.8.8.8 -oX scan.xml
 WORKDIR /scan
-
-COPY --from=builder /build/bin/masscan /usr/local/bin/masscan
+COPY --from=build /build/bin/masscan /usr/local/bin/masscan
 
 ENTRYPOINT ["/usr/local/bin/masscan"]
-
