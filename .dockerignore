@@ -1,4 +1,6 @@
 .gitignore
+.git/
+.github/
 Dockerfile
 README.md
 
